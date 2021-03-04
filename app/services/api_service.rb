@@ -5,12 +5,17 @@ require 'repo'
 require 'contributor'
 require 'pull'
 require 'commit'
+require 'commit'
 
 class ApiService
 
   def self.get_info(uri)
-    response = Faraday.get("https://api.github.com/repos/avjohnston/little-esty-shop#{uri}")
-    parsed = JSON.parse(response.body, symbolize_names: true)
+    response = Faraday.get(uri)
+    if response == 'API calls quota exceeded! maximum admitted 100 per 1h.'
+      parsed = JSON.parse(response.body, symbolize_names: true)
+    else
+      parsed = []
+    end
   end
 
   # def self.repo
