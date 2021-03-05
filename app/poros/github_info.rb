@@ -9,24 +9,34 @@ class GithubInfo
     @repo_url = url
   end
 
-  def add_contributor(contributor)
-    GithubService.contributor_logins(@repo_url).each do |login|
-      @contributors << login
+  def contributors
+    if @repo_name != "validation error"
+      GithubService.contributor_logins(@repo_url).each do |login|
+        @contributors << login
+      end
+    else
+      @contributors = []
     end
   end
 
   def name_formatted
-    @repo_name.split("-").map(&:capitalize).join(" ")
+    if @repo_name != "validation error"
+      @repo_name.split("-").map(&:capitalize).join(" ")
+    end
   end
 
   def pull_count
-    pulls = GithubService.pulls(@repo_url)
-    if pulls.is_a?(Hash)
-      1
-    elsif pulls.nil?
-      0
+    if @repo_name != "validation error"
+      pulls = GithubService.pulls(@repo_url)
+      if pulls.is_a?(Hash)
+        1
+      elsif pulls.nil?
+        0
+      else
+        pulls.count
+      end
     else
-      pulls.count
+      1
     end
   end
 end

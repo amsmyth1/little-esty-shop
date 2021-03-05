@@ -17,7 +17,7 @@ class GithubService < ApiService
   end
 
   def self.contributor_logins(url)
-    contributors.map do |contributor|
+    contributors(url).map do |contributor|
       contributor[:login]
     end
   end

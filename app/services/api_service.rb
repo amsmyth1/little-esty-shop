@@ -1,12 +1,3 @@
-# require 'faraday'
-# require 'pry'
-# require 'json'
-# require 'repo'
-# require 'contributor'
-# require 'pull'
-# require 'commit'
-# require 'commit'
-
 class ApiService
 
   def self.get_info(uri)
