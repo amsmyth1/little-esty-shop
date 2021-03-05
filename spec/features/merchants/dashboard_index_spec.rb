@@ -84,7 +84,7 @@ RSpec.describe 'As a merchant' do
     it 'I see a link to view all my discounts' do
       visit merchant_dashboard_index_path(@merchant)
 
-      click_on("View Discounts")
+      click_on("My Discounts")
       expect(current_path).to eq(merchant_discounts_path(@merchant))
     end
   end
