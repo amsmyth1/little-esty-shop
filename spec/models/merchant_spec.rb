@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Merchant, type: :model do
   describe 'relationhips' do
     it { should have_many :items }
+    it { should have_many :discounts }
     it { should have_many(:invoice_items).through(:items)}
   end
 
