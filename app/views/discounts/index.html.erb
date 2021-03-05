@@ -11,3 +11,11 @@
     </section>
   <% end %>
 </section>
+
+<section class="merchant_discounts" id="holidays">
+  <h2>Upcoming Holidays:</h2>
+  <% @holidays.each do |holiday| %>
+    <li><%= holiday %></li>
+  <% end %>
+
+</section>
