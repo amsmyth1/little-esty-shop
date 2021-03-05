@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe 'As a merchant' do
   before :each do
-    skip
     @merchant = create(:merchant)
   end
   describe 'when viewing the merchant discounts new page' do
@@ -15,9 +14,9 @@ RSpec.describe 'As a merchant' do
     it 'should create a discount when form is filled out correctly' do
       visit new_merchant_discount_path(@merchant)
 
-      fill_in :name, with: "SPEC test SPECIAL"
-      fill_in :threshold, with: 5
-      fill_in :percentage, with: 0.50
+      fill_in "name", with: "SPEC test SPECIAL"
+      fill_in "threshold", with: 5
+      fill_in "percentage", with: 0.50
 
       click_on "Submit"
 
@@ -27,16 +26,14 @@ RSpec.describe 'As a merchant' do
     it 'should send a flash message when name is forgotten' do
       visit new_merchant_discount_path(@merchant)
 
-      fill_in :name, with: ""
-      fill_in :threshold, with: 5
-      fill_in :percentage, with: 0.50
+      fill_in "name", with: ""
+      fill_in "threshold", with: 5
+      fill_in "percentage", with: 0.50
 
       click_on "Submit"
-
-      expect(current_path).to eq(new_merchant_discount_path(@merchant))
-      expect(page).to have_content("The name cannot be blank")
+      expect(page).to have_content("Name cannot be blank")
     end
-    it 'should send a flash message when name is threshold is 1 or less' do
+    it 'should send a flash message when threshold is 1 or less' do
       visit new_merchant_discount_path(@merchant)
 
       fill_in :name, with: "SPEC test SPECIAL"
@@ -45,8 +42,7 @@ RSpec.describe 'As a merchant' do
 
       click_on "Submit"
 
-      expect(current_path).to eq(new_merchant_discount_path(@merchant))
-      expect(page).to have_content("The threshold must be greater than 1")
+      expect(page).to have_content("Threshold must be greater than 1")
 
       fill_in :name, with: "SPEC test SPECIAL"
       fill_in :threshold, with: 1
@@ -54,8 +50,7 @@ RSpec.describe 'As a merchant' do
 
       click_on "Submit"
 
-      expect(current_path).to eq(new_merchant_discount_path(@merchant))
-      expect(page).to have_content("The threshold must be greater than 1")
+      expect(page).to have_content("Threshold must be greater than 1")
     end
     it 'should send a flash message when percentage is 0 or greater than 1' do
       visit new_merchant_discount_path(@merchant)
@@ -66,16 +61,13 @@ RSpec.describe 'As a merchant' do
 
       click_on "Submit"
 
-      expect(current_path).to eq(new_merchant_discount_path(@merchant))
-      expect(page).to have_content("The percentage discount must be greater than 0.")
+      expect(page).to have_content("Percentage must be between 0 and 1")
       fill_in :name, with: "SPEC test SPECIAL"
       fill_in :threshold, with: 5
       fill_in :percentage, with: 1.50
 
       click_on "Submit"
-
-      expect(current_path).to eq(new_merchant_discount_path(@merchant))
-      expect(page).to have_content("The percentage discount must be less than 100% (or 1).")
+      expect(page).to have_content("Percentage must be between 0 and 1")
     end
   end
 end

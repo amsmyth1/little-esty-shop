@@ -5,8 +5,8 @@
   <%= f.label :name %><br>
   <%= f.text_field :name, value: @discount.name %><br><br>
   <%= f.label :threshold %><br>
-  <%= f.number_field :threshold, value: @discount.threshold %><br><br>
+  <%= f.number_field :threshold, min:1, value: @discount.threshold %><br><br>
   <%= f.label :percentage %><br>
-  <%= f.number_field :percentage, min: 0, max: 1, value: @discount.percentage %><br><br>
+  <%= f.text_field :percentage, min: 0, max: 1, value: @discount.percentage %><br><br>
   <%= f.submit button_text %><br>
 <% end %>

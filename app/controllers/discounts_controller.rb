@@ -18,18 +18,16 @@ class DiscountsController < ApplicationController
   end
 
   def new
-    # binding.pry
     @merchant = Merchant.find(params[:merchant_id])
     @discount = @merchant.discounts.new
-
   end
 
   def create
     @merchant = Merchant.find(params[:merchant_id])
-    new_merchant_id = Discount.maximum(:id)
+    # new_merchant_id = (Discount.maximum(:id) + 1)
 
-    @discount = @merchant.discounts.new(id: new_merchant_id)
-
+    # @discount = @merchant.discounts.new(discount_params.merge({id: new_merchant_id}))
+    @discount = @merchant.discounts.new(discount_params)
     if @discount.save
       flash[:success] = "Your discount has been created!"
       redirect_to merchant_discounts_path(@merchant)
