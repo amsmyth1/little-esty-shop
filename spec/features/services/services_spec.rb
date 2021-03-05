@@ -23,7 +23,6 @@ RSpec.describe "Service Clients" do
     it "can translate github endpoint" do
       lil_esty = GithubService.repo_object("https://api.github.com/repos/amsmyth1/little-esty-shop")
 
-      # expect(GithubService.commits("amsmyth1")).to eq("amsmyth1")
       answer_options = ["little-esty-shop", "validation error"]
       answer = answer_options.include?(lil_esty.repo_name)
       expect(answer).to eq(true)
