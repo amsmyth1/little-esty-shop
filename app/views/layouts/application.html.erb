@@ -11,8 +11,9 @@
 
   <body>
     <h2><%= @repo %></h2>
-    Contributors: <%= @contributors %><br><br>
-    Pull Requests: <%= @pulls %><br><br>
+      Contributors: <%= @repo.contributors %><br><br>
+      Pull Requests: <%= @repo.pull_count %><br><br>
+
 
     <%= link_to "All Merchant Dashboards", merchants_path %>
     <%= link_to "Admin Dashboard", admin_index_path %>
@@ -23,4 +24,4 @@
 
     <%= yield %>
   </body>
-</html> 
+</html>
