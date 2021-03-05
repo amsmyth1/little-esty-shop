@@ -17,6 +17,7 @@ namespace :csv_load do
     build("./db/data/invoices.csv", Invoice)
     build("./db/data/invoice_items.csv", InvoiceItem)
     build("./db/data/transactions.csv", Transaction)
+    build("./db/data/discounts.csv", Discount)
   end
 
   desc "TODO"
@@ -47,6 +48,11 @@ namespace :csv_load do
   desc "TODO"
   task transactions: :environment do
     build("./db/data/transactions.csv", Transaction)
+  end
+
+  desc "TODO"
+  task transactions: :environment do
+    build("./db/data/discounts.csv", Discount)
   end
 
 end
