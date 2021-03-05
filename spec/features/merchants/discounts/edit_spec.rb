@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe "As a merchant" do
   before :each do
-    skip
     @merchant = create(:merchant)
     @discount = create(:discount, merchant_id: @merchant.id)
   end
