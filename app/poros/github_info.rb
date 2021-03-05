@@ -23,7 +23,7 @@ class GithubInfo
     pulls = GithubService.pulls(@repo_url)
     if pulls.is_a?(Hash)
       1
-    elsif pull.nil?
+    elsif pulls.nil?
       0
     else
       pulls.count
