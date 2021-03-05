@@ -12,10 +12,6 @@ RSpec.describe "Service Clients" do
       else
         expect(@holiday_info).to eq([])
       end
-
-      # parsed[0..2].map do |holiday|
-      #     holiday[:name]
-      # end
     end
   end
 
@@ -36,11 +32,13 @@ RSpec.describe "Service Clients" do
   end
 
   describe "HolidayService Client" do
-    it "can translate endpoint to hash" do
-      @holiday_info = ApiService.get_info("https://date.nager.at/Api/v2/NextPublicHolidays/US")
-
-      expect(@holiday_info.class).to eq(Array)
-      expect(HolidayService.next_three_holidays).to eq(["Memorial Day", "Independence Day", "Labour Day"])
+    it "can translate endpoint" do
+      holidays = ApiService.get_info("https://date.nager.at/Api/v2/NextPublicHolidays/US")
+      if holidays.count > 0
+        expect(HolidayService.next_three_holidays).to eq(["Memorial Day on 2021-05-31", "Independence Day on 2021-07-05", "Labour Day on 2021-09-06"])
+      else
+        expect(HolidayService.next_three_holidays).to eq([])
+      end
     end
   end
 end
