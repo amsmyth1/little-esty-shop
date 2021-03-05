@@ -18,5 +18,30 @@ class DiscountsController < ApplicationController
   end
 
   def new
-  end 
+    # binding.pry
+    @merchant = Merchant.find(params[:merchant_id])
+    @discount = @merchant.discounts.new
+
+  end
+
+  def create
+    @merchant = Merchant.find(params[:merchant_id])
+    new_merchant_id = Discount.maximum(:id)
+
+    @discount = @merchant.discounts.new(id: new_merchant_id)
+
+    if @discount.save
+      flash[:success] = "Your discount has been created!"
+      redirect_to merchant_discounts_path(@merchant)
+    else
+      flash[:error] = "Name cannot be blank. Threshold must be greater than 1.
+      Percentage must be between 0 and 1."
+      render :new
+    end
+  end
+
+  private
+  def discount_params
+    params.permit(:name, :threshold, :percentage)
+  end
 end

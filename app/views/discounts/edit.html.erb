@@ -1,0 +1,5 @@
+<%= render partial: 'form', locals: { header_2: "Editing #{@discount.name}",
+                                      path: merchant_discount_path(@merchant.id, @discount.id),
+                                      method: :patch,
+                                      button_text: "Update"
+                                    } %>
