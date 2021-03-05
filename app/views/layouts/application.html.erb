@@ -10,9 +10,9 @@
   </head>
 
   <body>
-    <h2><%= @repo %></h2>
-      Contributors: <%= @repo.contributors %><br><br>
-      Pull Requests: <%= @repo.pull_count %><br><br>
+    <%= @repo.repo_name %> |
+      Contributors: <%= @repo.contributors %>
+      | Pull Requests: <%= @repo.pull_count %><br>
 
 
     <%= link_to "All Merchant Dashboards", merchants_path %>
