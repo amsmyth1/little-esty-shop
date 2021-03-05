@@ -37,7 +37,7 @@ RSpec.describe "Service Clients" do
       if holidays.count > 0
         expect(HolidayService.next_three_holidays).to eq(["Memorial Day on 2021-05-31", "Independence Day on 2021-07-05", "Labour Day on 2021-09-06"])
       else
-        expect(HolidayService.next_three_holidays).to eq([])
+        expect(HolidayService.next_three_holidays).to eq(["Error loading external API"])
       end
     end
   end

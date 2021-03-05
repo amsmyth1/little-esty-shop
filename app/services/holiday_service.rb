@@ -7,6 +7,8 @@ class HolidayService < ApiService
       next_three_holidays.map do |holiday|
         "#{holiday[:name]} on #{holiday[:date]}"
       end
-    end
+    else
+      ["Error loading external API"]
+    end 
   end
 end
