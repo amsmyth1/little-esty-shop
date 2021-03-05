@@ -47,6 +47,13 @@ RSpec.describe Discount, type: :model do
 
 
   describe 'class methods' do
+    describe "::max_id" do
+      it 'returns max id plus 1' do
+        merchant = create(:merchant)
+        discount = create(:discount, merchant_id: merchant.id)
+        expect(Discount.max_id).to eq(Discount.maximum(:id) + 1)
+      end
+    end
   end
 
   describe 'instance methods' do
