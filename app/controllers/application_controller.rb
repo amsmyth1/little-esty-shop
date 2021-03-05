@@ -4,14 +4,15 @@ before_action :repo_object,
               :pull_objects
 
   def repo_object
-    @repo ||= GithubService.repo_object
+    @repo ||= GithubInfo.name
   end
 
   def contributor_objects
-    @contributors ||= GithubService.contributor_objects
+    # @contributors ||= GithubService.contributor_objects
+    @contributors ||= GithubInfo.contributors
   end
 
   def pull_objects
-    @pulls ||= GithubService.pull_objects
+    @pulls ||= GithubService.pull_count
   end
 end

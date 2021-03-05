@@ -1,20 +1,20 @@
 # require 'faraday'
 # require 'pry'
 # require 'json'
-require 'repo'
-require 'contributor'
-require 'pull'
-require 'commit'
-require 'commit'
+# require 'repo'
+# require 'contributor'
+# require 'pull'
+# require 'commit'
+# require 'commit'
 
 class ApiService
 
   def self.get_info(uri)
     response = Faraday.get(uri)
-    if response == 'API calls quota exceeded! maximum admitted 100 per 1h.'
-      parsed = JSON.parse(response.body, symbolize_names: true)
-    else
+    if response == String || response == Hash
       parsed = []
+    else
+      parsed = JSON.parse(response.body, symbolize_names: true)
     end
   end
 
