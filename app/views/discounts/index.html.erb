@@ -1,0 +1,10 @@
+<h1><%= @merchant.name %>'s Discounts</h1>
+
+<section class="discount_info">
+<% @discounts.each do |discount| %>
+  <section class="discount_info" id="discount-<%= discount.id %>">
+    <%= link_to discount.id, merchant_discount_path(@merchant.id, discount.id) %>
+    - <%= discount.name %> | Quantity threshold:<%= discount.threshold %> Percentage discount: <%= discount.percentage %>
+  </section>
+<% end %>
+</section>
