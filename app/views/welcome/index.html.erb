@@ -5,3 +5,10 @@
   <%= link_to "Merchant Dashboard Access", merchants_path %> |
   <%= link_to "Admin Access", admin_index_path %>
 </nav>
+
+<body>
+
+<%= @repo.repo_name %> |
+  Contributors: <%= @repo.contributors %>
+  | Pull Requests: <%= @repo.pull_count %>
+</body>

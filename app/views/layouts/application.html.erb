@@ -10,10 +10,6 @@
   </head>
 
   <body>
-    <h2><%= @repo %></h2>
-    Contributors: <%= @contributors %><br><br>
-    Pull Requests: <%= @pulls %><br><br>
-
     <%= link_to "All Merchant Dashboards", merchants_path %>
     <%= link_to "Admin Dashboard", admin_index_path %>
 
@@ -23,4 +19,4 @@
 
     <%= yield %>
   </body>
-</html> 
+</html>
