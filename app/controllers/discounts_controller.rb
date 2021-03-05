@@ -43,7 +43,12 @@ class DiscountsController < ApplicationController
 
   def create
     @merchant = Merchant.find(params[:merchant_id])
-    @discount = @merchant.discounts.new(discount_params)
+    new_discount_id = Discount.max_id
+    @discount = @merchant.discounts.new(id: new_discount_id,
+                                name: discount_params[:name],
+                                threshold: discount_params[:threshold],
+                                percentage: discount_params[:percentage]
+                              )
     if @discount.save
       flash[:success] = "Your discount has been created!"
       redirect_to merchant_discounts_path(@merchant)
