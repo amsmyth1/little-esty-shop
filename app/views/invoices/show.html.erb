@@ -2,6 +2,9 @@
 <h3>Status: <%= @invoice.status %></h3>
 <h3>Created on: <%= @invoice.created_at_view_format %></h3>
 <h3>Total Revenue: $<%= '%.2f' % @invoice.total_revenue %></h3>
+<% if @invoice.bulk_discount? %>
+  <h3>Bulk Discount: <%= @invoice.bulk_discount_info %></h3>
+<% end  %>
 
 <h2>Customer:</h2>
 <p><%= @invoice.customer_full_name %></p>
