@@ -43,10 +43,10 @@ RSpec.describe 'As a merchant' do
 
   def set_up
     @merchant = create(:merchant)
-    @discount_1 = @merchant.discounts.create(:discount, name: "Friends and Family", threshold: 10, percentage: 0.10)
-    @discount_2 = @merchant.discounts.create(:discount, name: "Spring Fever", threshold: 20, percentage: 0.20)
-    @discount_3 = @merchant.discounts.create(:discount, name: "Winter Blues", threshold: 30, percentage: 0.30)
-    @discount_4 = @merchant.discounts.create(:discount, name: "Whale Watch", threshold: 40, percentage: 0.40)
-    @discount_5 = @merchant.discounts.create(:discount, name: "Big Spenda Club", threshold: 50, percentage: 0.50)
+    @discount_1 = create(:discount, merchant_id: @merchant.id)
+    @discount_2 = create(:discount, merchant_id: @merchant.id)
+    @discount_3 = create(:discount, merchant_id: @merchant.id)
+    @discount_4 = create(:discount, merchant_id: @merchant.id)
+    @discount_5 = create(:discount, merchant_id: @merchant.id)
   end
 end

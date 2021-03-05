@@ -4,7 +4,7 @@ RSpec.describe "As a merchant" do
   before :each do
     skip
     @merchant = create(:merchant)
-    @discount = @merchant.discounts.create(:discount)
+    @discount = create(:discount, merchant_id: @merchant.id)
   end
 
   describe "when viewing the merchant discount edit page" do
