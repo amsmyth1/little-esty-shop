@@ -1,0 +1,12 @@
+<h1> <%= @merchant.name %> Discounts</h1>
+<h2> <%= header_2 %> </h2>
+
+<%= form_with url: path, method: method, local: true do |f|%>
+  <%= f.label :name %><br>
+  <%= f.text_field :name, value: @discount.name %><br><br>
+  <%= f.label :threshold %><br>
+  <%= f.number_field :threshold, min:1, value: @discount.threshold %><br><br>
+  <%= f.label :percentage %><br>
+  <%= f.text_field :percentage, min: 0, max: 1, value: @discount.percentage %><br><br>
+  <%= f.submit button_text %><br>
+<% end %>

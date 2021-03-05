@@ -18,15 +18,15 @@ RSpec.describe 'As a merchant' do
     end
     it 'should link to each discount show page' do
       visit merchant_discounts_path(@merchant)
-      within ".discount_info#discount-#{discount_1.id}" do
-        click_on("#{discount_1.id}")
+      within ".discount_info#discount-#{@discount_1.id}" do
+        click_on("#{@discount_1.id}")
       end
 
-      expect(current_path).to eq(merchant_discount_path(discount_1))
+      expect(current_path).to eq(merchant_discount_path(@merchant, @discount_1))
     end
     it 'should have a link to delete a discount' do
       visit merchant_discounts_path(@merchant)
-      within ".discount_info#discount-#{discount_1.id}" do
+      within ".discount_info#discount-#{@discount_1.id}" do
         click_on("Delete Discount")
       end
       expect(current_path).to eq(merchant_discounts_path(@merchant))
