@@ -14,7 +14,7 @@ RSpec.describe 'As a merchant' do
     @invoice_1 = create(:invoice, customer_id: @customer_1.id)
     @invoice_2 = create(:invoice, customer_id: @customer_2.id)
 
-    @invoice_item_1 = create(:invoice_item, invoice_id: @invoice_1.id, item_id: @item_1.id, status: :pending)
+    @invoice_item_1 = create(:invoice_item, invoice_id: @invoice_1.id, item_id: @item_1.id, status: :pending, quantity: 100)
     @invoice_item_2 = create(:invoice_item, invoice_id: @invoice_2.id, item_id: @item_2.id, status: :packaged)
     @invoice_item_3 = create(:invoice_item, invoice_id: @invoice_1.id, item_id: @item_2.id, status: :pending)
   end
@@ -26,6 +26,8 @@ RSpec.describe 'As a merchant' do
       expect(page).to have_content(@invoice_1.id)
       expect(page).to have_content(@invoice_1.status)
       expect(page).to have_content(@invoice_1.created_at.strftime('%A, %B %d, %Y'))
+      expect(page).to have_content("Bulk Discount:")
+      expect(page).to have_content(@invoice_1.bulk_discount_info)
     end
 
     it 'I see all of the customer information related to that invoice' do
