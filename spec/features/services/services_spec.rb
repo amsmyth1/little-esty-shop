@@ -26,7 +26,11 @@ RSpec.describe "Service Clients" do
       answer_options = ["little-esty-shop", "validation error"]
       answer = answer_options.include?(lil_esty.repo_name)
       expect(answer).to eq(true)
-      expect(lil_esty.contributors).to eq([])
+
+      answer_options = [[], ["amsmyth1", "aschwartz1", "avjohnston", "BrianZanti", "abreaux26", "timomitchel", "scottalexandra"]]
+      answer = answer_options.include?(lil_esty.contributors)
+
+      expect(answer).to eq(true)
       expect(lil_esty.pull_count).to eq(1)
     end
   end
