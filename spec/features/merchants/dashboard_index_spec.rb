@@ -80,6 +80,13 @@ RSpec.describe 'As a merchant' do
       expect(page).to have_content("Items Ready to Ship")
       expect(page).to have_link("Invoice ##{@invoice_1.id}")
     end
+
+    it 'I see a link to view all my discounts' do
+      visit merchant_dashboard_index_path(@merchant)
+
+      click_on("View Discounts")
+      expect(current_path).to eq(merchant_discounts_path(@merchant))
+    end
   end
   def setup
     @merchant = create(:merchant)
