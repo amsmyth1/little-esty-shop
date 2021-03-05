@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Discount, type: :model do
   describe 'relationhips' do
     it { should belong_to :merchant }
-    it { should have_many(:invoice_items).through(:merchant)}
+    # it { should have_many(:invoice_items).through(:merchant)}
   end
 
   describe 'validations' do
