@@ -56,4 +56,12 @@ class Merchant < ApplicationRecord
                  .where('invoices.status = ?', Invoice.statuses[:completed])
                  .order('invoices.created_at')
   end
+
+  def clean_discounts
+    repeated_thresholds = discounts.select("threshold, count(threshold)").group('discounts.threshold').having("count(threshold) > ?", 1).pluck(:threshold)
+    repeated_thresholds.each do |repeated_threshold|
+      count = discounts.where(threshold: repeated_threshold)
+      discounts.where(threshold: repeated_threshold).order(:percentage).limit(count -1).destroy_all
+    end
+  end
 end
