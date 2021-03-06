@@ -75,6 +75,39 @@ RSpec.describe Invoice do
       it 'returns total revenue from a specific invoice' do
         expect('%.2f' % @invoice_1.total_revenue).to eq('30.00')
       end
+      it 'returns total revenue from a specific invoice including bulk discounts' do
+        merchant = create(:merchant)
+        discount_1 = create(:discount, threshold: 5, percentage: 0.10, merchant_id: merchant.id)
+        discount_2 = create(:discount, threshold: 5, percentage: 0.15, merchant_id: merchant.id)
+        discount_3 = create(:discount, threshold: 10, percentage: 0.15, merchant_id: merchant.id)
+        discount_4 = create(:discount, threshold: 15, percentage: 0.20, merchant_id: merchant.id)
+        item = create(:item, merchant_id: merchant.id)
+        item2 = create(:item, merchant_id: merchant.id)
+        item3 = create(:item, merchant_id: merchant.id)
+        item4 = create(:item, merchant_id: merchant.id)
+
+        customer_1 = create(:customer, first_name: "Ace")
+        invoice_1 = create(:invoice, customer_id: customer_1.id, status: :completed)
+        invoice_item_1 = create(:invoice_item, item_id: item.id, invoice_id: invoice_1.id, quantity: 5, unit_price: 13635)
+        invoice_item_2 = create(:invoice_item, item_id: item2.id, invoice_id: invoice_1.id, quantity: 10, unit_price: 13635)
+        invoice_item_3 = create(:invoice_item, item_id: item3.id, invoice_id: invoice_1.id, quantity: 15, unit_price: 13635)
+        invoice_item_4 = create(:invoice_item, item_id: item4.id, invoice_id: invoice_1.id, quantity: 1, unit_price: 13635)
+
+        answer = (5 * (13635 * 0.15))
+        answer2 = (10 * (13635 * 0.15))
+        answer3 = (15 * (13635 * 0.20))
+        answer4 = (1 * 13635)
+        answer_total_rev = (answer + answer2 + answer3 + answer4)
+        invoice_item_1.apply_revenue
+        invoice_item_2.apply_revenue
+        invoice_item_3.apply_revenue
+        invoice_item_4.apply_revenue
+        expect(invoice_item_2.revenue).to eq(answer2)
+        expect(invoice_item_1.revenue).to eq(answer)
+        expect(invoice_item_3.revenue).to eq(answer3)
+        expect(invoice_item_4.revenue).to eq(answer4)
+        expect(invoice_1.total_revenue).to eq(answer_total_rev)
+      end
     end
   end
 

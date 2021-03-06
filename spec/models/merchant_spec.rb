@@ -102,7 +102,7 @@ RSpec.describe Merchant, type: :model do
       end
     end
     describe '#clean_discounts' do
-      it 'scrubs discounts of repeat thresholds grabbing the larger' do
+      it 'scrubs discounts of repeat thresholds grabbing the larger percentage discount' do
         merchant = create(:merchant)
         discount_1 = create(:discount, threshold: 5, percentage: 0.10, merchant_id: merchant.id)
         discount_2 = create(:discount, threshold: 5, percentage: 0.15, merchant_id: merchant.id)

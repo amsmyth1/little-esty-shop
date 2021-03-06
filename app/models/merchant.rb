@@ -58,6 +58,11 @@ class Merchant < ApplicationRecord
   end
 
   def clean_discounts
+    clean_discounts_repeat_threshold
+    # clean_discounts_repeat_percentage
+  end
+
+  def clean_discounts_repeat_threshold
     #eliminates duplicate threshold discounts so only the larger percentage remains
     repeated_thresholds = discounts
                     .select("threshold, count(threshold)")
@@ -73,7 +78,24 @@ class Merchant < ApplicationRecord
         .destroy_all
     end
   end
-end 
+  # def clean_discounts_repeat_percentage
+  #   #eliminates duplicate percentage discounts so oaanly the larger percentage remains
+  #   repeated_percentages = discounts
+  #                   .select("percentage, count(percentage)")
+  #                   .group('discounts.percentage')
+  #                   .having("count(percentage) > ?", 1)
+  #                   .pluck(:percentage)
+  #   repeated_percentages.each do |repeated_percentage|
+  #     count = discounts.where(percentage: repeated_percentage).size
+  #     self.discounts
+  #       .where(percentage: repeated_percentage)
+  #       .order(threshold: :desc)
+  #       .limit(count - 1)
+  #       .destroy_all
+  #   end
+  #   binding.pry
+  # end
+end
   # def clean_discounts
   #   #eliminates duplicate threshold discounts so only the larger percentage remains
   #   binding.pry

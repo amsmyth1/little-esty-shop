@@ -29,17 +29,26 @@ class InvoiceItem < ApplicationRecord
   end
 
   def discount_available
+
     merchant.clean_discounts
+
     self.discounts
     .where("discounts.threshold <= ?", self.quantity)
     .order("discounts.percentage desc")
     .limit(1)
+
   end
 
   def apply_discount
-    if discount_available == 1
-      discount = discount_available.first.percentage
-      self.update({discount: discount})
+    if discount_available.count == 1
+      self.update({discount_id: discount_available.first.id,
+                      discount: discount_available.first.percentage})
     end
+  end
+
+  def apply_revenue
+    apply_discount
+    total_rev = (quantity * (unit_price * discount))
+    self.update({revenue: total_rev})
   end
 end
