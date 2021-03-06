@@ -101,6 +101,28 @@ RSpec.describe Merchant, type: :model do
         expect(@merchant_10.best_day).to eq(sample_date)
       end
     end
+    describe '#discount_threshold_ranges' do
+      it 'gets active discounts threshold range and percentage' do
+        merchant = create(:merchant)
+        discount_1 = create(:discount, threshold: 5, percentage: 0.10, merchant_id: merchant.id)
+        discount_2 = create(:discount, threshold: 5, percentage: 0.15, merchant_id: merchant.id)
+        discount_3 = create(:discount, threshold: 10, percentage: 0.15, merchant_id: merchant.id)
+        discount_4 = create(:discount, threshold: 15, percentage: 0.20, merchant_id: merchant.id)
+        item = create(:item, merchant_id: merchant.id)
+        item2 = create(:item, merchant_id: merchant.id)
+        item3 = create(:item, merchant_id: merchant.id)
+        item4 = create(:item, merchant_id: merchant.id)
+
+        customer_1 = create(:customer, first_name: "Ace")
+        invoice_1 = create(:invoice, customer_id: customer_1.id, status: :completed, created_at: sample_date)
+        invoice_item_1 = create(:invoice_item, item_id: item.id, invoice_id: invoice_1.id, status: :pending, quantity: 5, unit_price: 5)
+        invoice_item_2 = create(:invoice_item, item_id: item2.id, invoice_id: invoice_1.id, quantity: 10, unit_price: 5)
+        invoice_item_3 = create(:invoice_item, item_id: item3.id, invoice_id: invoice_1.id, quantity: 15, unit_price: 5)
+        invoice_item_4 = create(:invoice_item, item_id: item4.id, invoice_id: invoice_1.id, quantity: 1, unit_price: 5)
+
+        expect(merchant.discount_threshold_ranges).to eq(6)
+      end
+    end
   end
 
   def sample_date
