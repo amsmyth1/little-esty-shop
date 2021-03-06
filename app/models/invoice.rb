@@ -22,6 +22,17 @@ class Invoice < ApplicationRecord
   end
 
   def total_revenue
-    invoice_items.pluck(Arel.sql("sum(invoice_items.quantity * invoice_items.unit_price) as total_revenue"))
+    invoice_items.apply_discount
+    invoice_items.pluck(Arel.sql("sum(invoice_items.quantity * (invoice_items.unit_price * invoice_items.discount)) as total_revenue"))
+  end
+
+  def bulk_discount
+     # Merchant.joins(:invoice_items).joins(:discounts)
+     #
+     #          .where('id = ?', self.merchant.id)
+     #          .where('discount.threshold > invoice_items.quantity')
+     #
+     #  merchant.invoice_items
+
   end
 end

@@ -101,8 +101,8 @@ RSpec.describe Merchant, type: :model do
         expect(@merchant_10.best_day).to eq(sample_date)
       end
     end
-    describe '#discount_threshold_ranges' do
-      it 'gets active discounts threshold range and percentage' do
+    describe '#clean_discounts' do
+      it 'scrubs discounts of repeat thresholds grabbing the larger' do
         merchant = create(:merchant)
         discount_1 = create(:discount, threshold: 5, percentage: 0.10, merchant_id: merchant.id)
         discount_2 = create(:discount, threshold: 5, percentage: 0.15, merchant_id: merchant.id)
@@ -120,7 +120,9 @@ RSpec.describe Merchant, type: :model do
         invoice_item_3 = create(:invoice_item, item_id: item3.id, invoice_id: invoice_1.id, quantity: 15, unit_price: 5)
         invoice_item_4 = create(:invoice_item, item_id: item4.id, invoice_id: invoice_1.id, quantity: 1, unit_price: 5)
 
-        expect(merchant.discount_threshold_ranges).to eq(6)
+        expect(merchant.discounts.count).to eq(4)
+        merchant.clean_discounts
+        expect(merchant.discounts.count).to eq(3)
       end
     end
   end

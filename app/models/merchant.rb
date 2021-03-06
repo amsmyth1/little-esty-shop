@@ -58,10 +58,84 @@ class Merchant < ApplicationRecord
   end
 
   def clean_discounts
-    repeated_thresholds = discounts.select("threshold, count(threshold)").group('discounts.threshold').having("count(threshold) > ?", 1).pluck(:threshold)
+    #eliminates duplicate threshold discounts so only the larger percentage remains
+    repeated_thresholds = discounts
+                    .select("threshold, count(threshold)")
+                    .group('discounts.threshold')
+                    .having("count(threshold) > ?", 1)
+                    .pluck(:threshold)
     repeated_thresholds.each do |repeated_threshold|
-      count = discounts.where(threshold: repeated_threshold)
-      discounts.where(threshold: repeated_threshold).order(:percentage).limit(count -1).destroy_all
+      count = discounts.where(threshold: repeated_threshold).size
+      self.discounts
+        .where(threshold: repeated_threshold)
+        .order(:percentage)
+        .limit(count - 1)
+        .destroy_all
     end
   end
-end
+end 
+  # def clean_discounts
+  #   #eliminates duplicate threshold discounts so only the larger percentage remains
+  #   binding.pry
+  #   repeated_thresholds = discounts
+  #                   .select("threshold, count(threshold)")
+  #                   .group('discounts.threshold')
+  #                   .having("count(threshold) > ?", 1)
+  #                   .pluck(:threshold)
+  #   repeated_thresholds.each do |repeated_threshold|
+  #     binding.pry
+  #     count = discounts.where(threshold: repeated_threshold)
+  #     self.discounts
+  #       .where(threshold: repeated_threshold)
+  #       .order(:percentage)
+  #       .limit(count - 1)
+  #       .destroy_all
+  #   end
+  # end
+
+  # def discounts_by_largest_threshold
+  #   clean_discounts
+  #   discounts
+  #     .order(threshold: :desc)
+  #     .select(:threshold, :percentage)
+  # end
+  #
+  # def discount_threshold_ranges
+  #   thresholds = discounts_by_largest_threshold
+  #   binding.pry
+  #   ranges = []
+  #   thresholds.each_with_index do |threshold, index|
+  #     binding.pry
+  #     ranges << [threshold, threshold_lower_range(threshold, index)]
+  #   end
+  #   ranges
+  # end
+  #
+  # def threshold_lower_range(threshold, index)
+  #   thresholds = discounts.order(threshold: :desc).pluck(:threshold)
+  #   next_threshold = thresholds[(index + 1)]
+  #   if next_threshold == nil
+  #     0
+  #   else
+  #   threshold_lower_range = next_threshold + 1
+  #   end
+  # end
+
+  # def discount_threshold_ranges
+  #   thresholds = discounts.order(threshold: :desc).pluck(:threshold)
+  #   ranges = []
+  #   thresholds.each_with_index do |threshold, index|
+  #     ranges << [threshold, threshold_lower_range(threshold, index)]
+  #   end
+  #   ranges
+  # end
+  #
+  # def threshold_lower_range(threshold, index)
+  #   thresholds = discounts.order(threshold: :desc).pluck(:threshold)
+  #   next_threshold = thresholds[(index + 1)]
+  #   if next_threshold == nil
+  #     0
+  #   else
+  #   threshold_lower_range = next_threshold + 1
+  #   end
+  # end

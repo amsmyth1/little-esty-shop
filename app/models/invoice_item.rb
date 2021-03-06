@@ -2,7 +2,7 @@ class InvoiceItem < ApplicationRecord
   belongs_to :item
   belongs_to :invoice
   has_many :merchants, through: :item
-  # has_many :discounts, through: :merchants
+  has_many :discounts, through: :merchants
 
   enum status: [:pending, :packaged, :shipped]
 
@@ -20,7 +20,26 @@ class InvoiceItem < ApplicationRecord
     item.name
   end
 
+  def merchant
+    item.merchant
+  end
+
   def invoice_date
     invoice.created_at_view_format
+  end
+
+  def discount_available
+    merchant.clean_discounts
+    self.discounts
+    .where("discounts.threshold <= ?", self.quantity)
+    .order("discounts.percentage desc")
+    .limit(1)
+  end
+
+  def apply_discount
+    if discount_available == 1
+      discount = discount_available.first.percentage
+      self.update({discount: discount})
+    end
   end
 end
