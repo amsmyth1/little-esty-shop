@@ -21,23 +21,65 @@ class Invoice < ApplicationRecord
     customer.full_name
   end
 
+  def merchant
+    items.first.merchant
+  end
+
   def total_revenue
-    invoice_items.each do |ii|
-      ii.apply_revenue
+    if merchant.discounts.count > 0
+      (Invoice.total_revenue_with_discount(self.id).to_f) + (Invoice.total_revenue_with_no_discount(self.id).to_f)
+    else
+      invoice_items.pluck(Arel.sql("sum(invoice_items.quantity * invoice_items.unit_price) as total_revenue")).first
     end
-    invoice_items.sum(:revenue)
   end
-  # def total_revenue
-  #   invoice_items.pluck(Arel.sql("sum(invoice_items.quantity * (invoice_items.unit_price * invoice_items.discount)) as total_revenue"))
-  # end
 
-  def bulk_discount
-     # Merchant.joins(:invoice_items).joins(:discounts)
-     #
-     #          .where('id = ?', self.merchant.id)
-     #          .where('discount.threshold > invoice_items.quantity')
-     #
-     #  merchant.invoice_items
-
+  def self.total_revenue_with_discount(invoice_id)
+    a = find_by_sql("
+      SELECT invoice_id, sum(quantity_ordered * unit_price * (1 - best_discount)) as revenue_with_discount
+      FROM (
+      	SELECT
+      		invoice_items.invoice_id as invoice_id,
+          invoice_items.quantity as quantity_ordered,
+          count(discounts) as discounts_eligible,
+          invoice_items.unit_price,
+          max(discounts.percentage) as best_discount
+        FROM discounts
+      	INNER JOIN items ON items.merchant_id = discounts.merchant_id
+      	INNER JOIN invoice_items ON invoice_items.item_id = items.id
+      	WHERE invoice_items.quantity >= discounts.threshold AND invoice_items.invoice_id = #{invoice_id}
+      	GROUP BY invoice_items.id
+            )
+      	AS revenue
+        GROUP BY invoice_id"
+            ).pluck('revenue_with_discount').first
   end
+  def self.total_revenue_with_no_discount(invoice_id)
+    a = find_by_sql("
+        SELECT
+          invoice_items.invoice_id as invoice_id,
+		      invoice_items.quantity * invoice_items.unit_price as regular_revenue
+		    FROM discounts
+			  INNER JOIN items ON items.merchant_id = discounts.merchant_id
+				INNER JOIN invoice_items ON invoice_items.item_id = items.id
+        WHERE invoice_items.invoice_id = #{invoice_id}
+				GROUP BY invoice_items.id
+				HAVING invoice_items.quantity < MIN(discounts.threshold)"
+            ).pluck('regular_revenue').first
+  end
+
+  def self.ii_and_associated_discounts(invoice_id)
+    find_by_sql("SELECT
+        invoice_items.id as ii_id,
+        invoice_items.quantity as quantity_ordered,
+        count(discounts) as discounts_eligible,
+        invoice_items.unit_price,
+        max(discounts.percentage) as best_discountm,
+        discounts.id as discount_id
+      FROM discounts
+      INNER JOIN items ON items.merchant_id = discounts.merchant_id
+      INNER JOIN invoice_items ON invoice_items.item_id = items.id
+      WHERE invoice_items.quantity >= discounts.threshold AND invoice_items.invoice_id = #{invoice_id}
+      GROUP BY invoice_items.id, discounts.id").pluck('discount_id')
+    end
+
 end

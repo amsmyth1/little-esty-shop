@@ -2,9 +2,6 @@
 <h3>Status: <%= @invoice.status %></h3>
 <h3>Created on: <%= @invoice.created_at_view_format %></h3>
 <h3>Total Revenue: $<%= '%.2f' % @invoice.total_revenue %></h3>
-<% if @invoice.bulk_discount? %>
-  <h3>Bulk Discount: <%= @invoice.bulk_discount_info %></h3>
-<% end  %>
 
 <h2>Customer:</h2>
 <p><%= @invoice.customer_full_name %></p>
@@ -16,6 +13,7 @@
       <p>Quantity: <%= invoice_item.quantity %></p>
       <p>Sold For: $<%= '%.2f' % invoice_item.unit_price %></p>
       <p>Status: <%= invoice_item.status_view_format %></p>
+      <p>Discounts: <%= %> </p>
 
       <%= form_with url: merchant_invoice_item_path(@merchant, invoice_item), method: :patch, params: { status: :status }, local: true do |f|%>
         <%= f.select :status, [:pending, :packaged, :shipped], selected: invoice_item.status %>

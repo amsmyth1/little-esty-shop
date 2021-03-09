@@ -55,7 +55,4 @@ RSpec.describe Discount, type: :model do
       end
     end
   end
-
-  describe 'instance methods' do
-  end
 end

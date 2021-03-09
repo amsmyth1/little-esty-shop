@@ -18,107 +18,14 @@ RSpec.describe InvoiceItem do
         expect(@invoice_item_1.item_name).to eq(@item.name)
       end
     end
-
     describe "#invoice_date" do
       it 'returns the name of the item' do
         expect(@invoice_item_1.invoice_date).to eq(@invoice_1.created_at_view_format)
       end
     end
-
     describe '#unit_price_fix' do
       it "cleans up unit price so they show two ending zeros" do
         expect(@invoice_item_2.unit_price_fix).to eq("5.00")
-      end
-    end
-    describe '#discount_available' do
-      it "returns 1 or 0 discounts that should be applied to ii" do
-        merchant = create(:merchant)
-        discount_1 = create(:discount, threshold: 5, percentage: 0.10, merchant_id: merchant.id)
-        discount_2 = create(:discount, threshold: 5, percentage: 0.15, merchant_id: merchant.id)
-        discount_3 = create(:discount, threshold: 10, percentage: 0.15, merchant_id: merchant.id)
-        discount_4 = create(:discount, threshold: 15, percentage: 0.20, merchant_id: merchant.id)
-        item = create(:item, merchant_id: merchant.id)
-        item2 = create(:item, merchant_id: merchant.id)
-        item3 = create(:item, merchant_id: merchant.id)
-        item4 = create(:item, merchant_id: merchant.id)
-
-        customer_1 = create(:customer, first_name: "Ace")
-        invoice_1 = create(:invoice, customer_id: customer_1.id, status: :completed)
-        invoice_item_1 = create(:invoice_item, item_id: item.id, invoice_id: invoice_1.id, quantity: 5, unit_price: 5)
-        invoice_item_2 = create(:invoice_item, item_id: item2.id, invoice_id: invoice_1.id, quantity: 10, unit_price: 5)
-        invoice_item_3 = create(:invoice_item, item_id: item3.id, invoice_id: invoice_1.id, quantity: 15, unit_price: 5)
-        invoice_item_4 = create(:invoice_item, item_id: item4.id, invoice_id: invoice_1.id, quantity: 1, unit_price: 5)
-
-        expect(invoice_item_2.discount_available).to eq([discount_2])
-        expect(invoice_item_1.discount_available).to eq([discount_2])
-        expect(invoice_item_3.discount_available).to eq([discount_4])
-        expect(invoice_item_4.discount_available.count).to eq(0)
-      end
-    end
-    describe '#apply_discount' do
-      it "takes the discount_available and updates the records" do
-        merchant = create(:merchant)
-        discount_1 = create(:discount, threshold: 5, percentage: 0.10, merchant_id: merchant.id)
-        discount_2 = create(:discount, threshold: 5, percentage: 0.15, merchant_id: merchant.id)
-        discount_3 = create(:discount, threshold: 10, percentage: 0.15, merchant_id: merchant.id)
-        discount_4 = create(:discount, threshold: 15, percentage: 0.20, merchant_id: merchant.id)
-        item = create(:item, merchant_id: merchant.id)
-        item2 = create(:item, merchant_id: merchant.id)
-        item3 = create(:item, merchant_id: merchant.id)
-        item4 = create(:item, merchant_id: merchant.id)
-
-        customer_1 = create(:customer, first_name: "Ace")
-        invoice_1 = create(:invoice, customer_id: customer_1.id, status: :completed)
-        invoice_item_1 = create(:invoice_item, item_id: item.id, invoice_id: invoice_1.id, quantity: 5, unit_price: 5)
-        invoice_item_2 = create(:invoice_item, item_id: item2.id, invoice_id: invoice_1.id, quantity: 10, unit_price: 5)
-        invoice_item_3 = create(:invoice_item, item_id: item3.id, invoice_id: invoice_1.id, quantity: 15, unit_price: 5)
-        invoice_item_4 = create(:invoice_item, item_id: item4.id, invoice_id: invoice_1.id, quantity: 1, unit_price: 5)
-
-        invoice_item_1.apply_discount
-        invoice_item_2.apply_discount
-        invoice_item_3.apply_discount
-        invoice_item_4.apply_discount
-
-        expect(invoice_item_2.discount).to eq(discount_2.percentage)
-        expect(invoice_item_1.discount).to eq(discount_2.percentage)
-        expect(invoice_item_3.discount).to eq(discount_4.percentage)
-        expect(invoice_item_2.discount_id).to eq(discount_2.id)
-        expect(invoice_item_1.discount_id).to eq(discount_2.id)
-        expect(invoice_item_3.discount_id).to eq(discount_4.id)
-      end
-    end
-    describe '#revenue' do
-      it "determines if there is an applicapble discount and then totals the ii revenue" do
-        merchant = create(:merchant)
-        discount_1 = create(:discount, threshold: 5, percentage: 0.10, merchant_id: merchant.id)
-        discount_2 = create(:discount, threshold: 5, percentage: 0.15, merchant_id: merchant.id)
-        discount_3 = create(:discount, threshold: 10, percentage: 0.15, merchant_id: merchant.id)
-        discount_4 = create(:discount, threshold: 15, percentage: 0.20, merchant_id: merchant.id)
-        item = create(:item, merchant_id: merchant.id)
-        item2 = create(:item, merchant_id: merchant.id)
-        item3 = create(:item, merchant_id: merchant.id)
-        item4 = create(:item, merchant_id: merchant.id)
-
-        customer_1 = create(:customer, first_name: "Ace")
-        invoice_1 = create(:invoice, customer_id: customer_1.id, status: :completed)
-        invoice_item_1 = create(:invoice_item, item_id: item.id, invoice_id: invoice_1.id, quantity: 5, unit_price: 13635)
-        invoice_item_2 = create(:invoice_item, item_id: item2.id, invoice_id: invoice_1.id, quantity: 10, unit_price: 13635)
-        invoice_item_3 = create(:invoice_item, item_id: item3.id, invoice_id: invoice_1.id, quantity: 15, unit_price: 13635)
-        invoice_item_4 = create(:invoice_item, item_id: item4.id, invoice_id: invoice_1.id, quantity: 1, unit_price: 13635)
-
-        answer = (5 * (13635 * 0.15))
-        answer2 = (10 * (13635 * 0.15))
-        answer3 = (15 * (13635 * 0.20))
-        answer4 = (1 * 13635)
-        invoice_item_1.apply_revenue
-        invoice_item_2.apply_revenue
-        invoice_item_3.apply_revenue
-        invoice_item_4.apply_revenue
-        #
-        expect(invoice_item_2.revenue).to eq(answer2)
-        expect(invoice_item_1.revenue).to eq(answer)
-        expect(invoice_item_3.revenue).to eq(answer3)
-        expect(invoice_item_4.revenue).to eq(answer4)
       end
     end
   end
@@ -129,7 +36,6 @@ RSpec.describe InvoiceItem do
         expect(InvoiceItem.search_for_quantity(@invoice_1.id, @item.id)).to eq(@invoice_item_1.quantity)
       end
     end
-
     describe '::find_all_by_invoice(invoice_id)' do
       it 'returns the invoice_items with a specific invoice id' do
         expect(InvoiceItem.find_all_by_invoice(@invoice_1.id)).to eq([@invoice_item_1])
