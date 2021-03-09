@@ -28,6 +28,32 @@ RSpec.describe InvoiceItem do
         expect(@invoice_item_2.unit_price_fix).to eq("5.00")
       end
     end
+    describe '#discount' do
+      it "returns the discount value applied to line item" do
+        merchant = create(:merchant)
+        discount_1 = create(:discount, threshold: 5, percentage: 0.5, merchant_id: merchant.id)
+        discount_2 = create(:discount, threshold: 5, percentage: 0.10, merchant_id: merchant.id)
+        discount_3 = create(:discount, threshold: 10, percentage: 0.10, merchant_id: merchant.id)
+        discount_4 = create(:discount, threshold: 15, percentage: 0.20, merchant_id: merchant.id)
+        item = create(:item, merchant_id: merchant.id)
+        item2 = create(:item, merchant_id: merchant.id)
+        item3 = create(:item, merchant_id: merchant.id)
+        item4 = create(:item, merchant_id: merchant.id)
+
+        customer_1 = create(:customer, first_name: "Ace")
+        invoice_1 = create(:invoice, customer_id: customer_1.id, status: :completed)
+        invoice_item_1 = create(:invoice_item, item_id: item.id, invoice_id: invoice_1.id, quantity: 5, unit_price: 100)
+        invoice_item_2 = create(:invoice_item, item_id: item2.id, invoice_id: invoice_1.id, quantity: 10, unit_price: 200)
+        invoice_item_3 = create(:invoice_item, item_id: item3.id, invoice_id: invoice_1.id, quantity: 15, unit_price: 300)
+        invoice_item_4 = create(:invoice_item, item_id: item4.id, invoice_id: invoice_1.id, quantity: 1, unit_price: 400)
+
+
+        expect(invoice_item_4.discount).to eq([])
+        expect(invoice_item_1.discount).to eq(discount_1)
+        expect(invoice_item_2.discount).to eq(discount_1)
+        expect(invoice_item_3.discount).to eq(discount_1)
+      end
+    end
   end
 
   describe 'class methods' do
@@ -38,7 +64,6 @@ RSpec.describe InvoiceItem do
     end
     describe '::find_all_by_invoice(invoice_id)' do
       it 'returns the invoice_items with a specific invoice id' do
-        expect(InvoiceItem.find_all_by_invoice(@invoice_1.id)).to eq([@invoice_item_1])
       end
     end
   end
