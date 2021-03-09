@@ -12,7 +12,7 @@ RSpec.describe "As a merchant" do
 
       expect(page).to have_content(@discount.name)
       expect(page).to have_content(@discount.threshold)
-      expect(page).to have_content(@discount.percentage)
+      expect(page).to have_content(@discount.percentage * 100)
     end
   end
 end

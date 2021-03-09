@@ -9,5 +9,6 @@ class InvoicesController < ApplicationController
     invoice_id = params[:id]
     @invoice = Invoice.find(invoice_id)
     @invoice_items = InvoiceItem.find_all_by_invoice(invoice_id)
+    @total_revenue = @invoice.total_revenue
   end
 end
