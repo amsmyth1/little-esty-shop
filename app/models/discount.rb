@@ -6,13 +6,6 @@ class Discount < ApplicationRecord
   validates_numericality_of :threshold, :greater_than => 1
   validates_numericality_of :percentage, :greater_than => 0, :less_than => 1
 
-  before_validation :apply_discount
-
-  def apply_discount
-    invoice_items
-
-  end
-
   def self.max_id
     if Discount.first == nil
       1

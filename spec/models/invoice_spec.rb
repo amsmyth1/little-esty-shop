@@ -53,7 +53,7 @@ RSpec.describe Invoice do
         expect(Invoice.all_invoices_with_unshipped_items).to eq([@invoice_1, @invoice_21])
       end
     end
-    describe '::total_revenue_with_discount(invoice_id)' do
+    describe '::total_revenue_with_discounts_applicable(invoice_id)' do
       it "calculates the total when no items are eligible for discount (examples 1)" do
         merchant = create(:merchant)
         merchant = create(:merchant)
@@ -73,8 +73,8 @@ RSpec.describe Invoice do
         invoice_item_5 = create(:invoice_item, item_id: item5.id, invoice_id: invoice_1.id, quantity: 1, unit_price: 100) #no discount
 
 
-        expect(Invoice.total_revenue_with_discount(invoice_1.id).to_f).to eq(0.00)
-        expect(Invoice.total_revenue_with_no_discount(invoice_1.id).to_f).to eq(400)
+        expect(Invoice.total_revenue_with_discounts_applicable(invoice_1.id).to_f).to eq(0.00)
+        expect(Invoice.total_revenue_with_no_discounts_applicable(invoice_1.id).to_f).to eq(400)
         expect(invoice_1.total_revenue.to_f).to eq(400)
       end
       it "calculates discounts for invoices with items that have no discount and different discounts (examples 2 and 3)" do
@@ -97,8 +97,8 @@ RSpec.describe Invoice do
 
         answer = (5 * 100 * 0.95) + (10 * 100 * 0.90) + (20 * 100 * 0.80) + 100
 
-        expect(Invoice.total_revenue_with_discount(invoice_1.id).to_f).to eq(answer - 100)
-        expect(Invoice.total_revenue_with_no_discount(invoice_1.id).to_f).to eq(100)
+        expect(Invoice.total_revenue_with_discounts_applicable(invoice_1.id).to_f).to eq(answer - 100)
+        expect(Invoice.total_revenue_with_no_discounts_applicable(invoice_1.id).to_f).to eq(100)
         expect(invoice_1.total_revenue.to_f).to eq(answer)
       end
       it "discounts the greatest percentage available for items that clear multiple discount thresholds (example 4)" do
@@ -126,8 +126,8 @@ RSpec.describe Invoice do
         answer_total_rev = (answer + answer2 + answer3 + answer4)
 
 
-        expect(Invoice.total_revenue_with_discount(invoice_1.id).to_f).to eq((answer + answer2 + answer3))
-        expect(Invoice.total_revenue_with_no_discount(invoice_1.id).to_f).to eq(answer4)
+        expect(Invoice.total_revenue_with_discounts_applicable(invoice_1.id).to_f).to eq((answer + answer2 + answer3))
+        expect(Invoice.total_revenue_with_no_discounts_applicable(invoice_1.id).to_f).to eq(answer4)
         expect(invoice_1.total_revenue).to eq(answer_total_rev)
       end
       it "calculates discounts for invoices with multiple vendor items (example 5)" do
@@ -152,8 +152,8 @@ RSpec.describe Invoice do
 
         answer = (5 * 100 * 0.95) + (10 * 100 * 0.90) + (5 * 100 * 0.90) + (10 * 100 * 0.80) + 100
 
-        expect(Invoice.total_revenue_with_discount(invoice_1.id).to_f).to eq(answer - 100)
-        expect(Invoice.total_revenue_with_no_discount(invoice_1.id).to_f).to eq(100)
+        expect(Invoice.total_revenue_with_discounts_applicable(invoice_1.id).to_f).to eq(answer - 100)
+        expect(Invoice.total_revenue_with_no_discounts_applicable(invoice_1.id).to_f).to eq(100)
         expect(invoice_1.total_revenue.to_f).to eq(answer)
       end
     end

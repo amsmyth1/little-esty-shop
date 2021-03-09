@@ -9,12 +9,13 @@
 <h2>Items on this Invoice:</h2>
   <% @invoice_items.each do |invoice_item| %>
     <section id="invoice-item-<%= invoice_item.item.id %>">
-      <p>Name: <%= invoice_item.item_name %></p>
-      <p>Quantity: <%= invoice_item.quantity %></p>
-      <p>Sold For: $<%= '%.2f' % invoice_item.unit_price %></p>
-      <p>Status: <%= invoice_item.status_view_format %></p>
-      <p>Discounts: <%= %> </p>
-
+      <h3>Name: <%= invoice_item.item_name %></h3>
+      <p>Quantity: <%= invoice_item.quantity %> |
+      Sold For: $<%= '%.2f' % invoice_item.unit_price %> |
+      Status: <%= invoice_item.status_view_format %> |
+      <% if invoice_item.discount != [] %>
+        Discounts:  <%= link_to invoice_item.discount.name, merchant_discount_path((invoice_item.discount.merchant_id), (invoice_item.discount.id))  %>
+      <% end %></p>
       <%= form_with url: merchant_invoice_item_path(@merchant, invoice_item), method: :patch, params: { status: :status }, local: true do |f|%>
         <%= f.select :status, [:pending, :packaged, :shipped], selected: invoice_item.status %>
         <%= f.submit "Update Item Status" %><br>

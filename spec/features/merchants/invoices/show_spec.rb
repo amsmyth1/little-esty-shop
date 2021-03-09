@@ -26,8 +26,6 @@ RSpec.describe 'As a merchant' do
       expect(page).to have_content(@invoice_1.id)
       expect(page).to have_content(@invoice_1.status)
       expect(page).to have_content(@invoice_1.created_at.strftime('%A, %B %d, %Y'))
-      expect(page).to have_content("Bulk Discount:")
-      expect(page).to have_content(@invoice_1.bulk_discount_info)
     end
 
     it 'I see all of the customer information related to that invoice' do

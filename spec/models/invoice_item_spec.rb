@@ -28,6 +28,11 @@ RSpec.describe InvoiceItem do
         expect(@invoice_item_2.unit_price_fix).to eq("5.00")
       end
     end
+    describe '#merchant' do
+      it "returns the merchant object associated with invoice_item" do
+        expect(@invoice_item_2.merchant).to eq(@merchant)
+      end
+    end
     describe '#discount' do
       it "returns the discount value applied to line item" do
         merchant = create(:merchant)
@@ -64,6 +69,8 @@ RSpec.describe InvoiceItem do
     end
     describe '::find_all_by_invoice(invoice_id)' do
       it 'returns the invoice_items with a specific invoice id' do
+
+        expect(InvoiceItem.find_all_by_invoice(@invoice_1.id)).to eq([@invoice_item_1])
       end
     end
   end

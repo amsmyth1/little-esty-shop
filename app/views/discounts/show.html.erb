@@ -2,6 +2,6 @@
 
 <h4> <%= @discount.name %> </h4>
 Quantity threshold: <%= @discount.threshold %><br><br>
-Percentage discount: $<%= @discount.percentage %><br><br>
+Percentage discount: <%= @discount.percentage * 100 %>%<br><br>
 
 <%= button_to "Update discount", edit_merchant_discount_path(@merchant, @discount), method: :get %>
