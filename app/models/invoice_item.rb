@@ -47,12 +47,12 @@ class InvoiceItem < ApplicationRecord
   end
 
   def discount_name
-    if discount.count > 0
+    if discount != []
       discount.name
     end
   end
   def discount_id
-    if discount.count > 0
+    if discount != []
       discount.id
     end
   end

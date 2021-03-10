@@ -33,6 +33,11 @@ RSpec.describe InvoiceItem do
         expect(@invoice_item_2.merchant).to eq(@merchant)
       end
     end
+    describe '#merchant_id' do
+      it "returns the merchant id associated with invoice_item" do
+        expect(@invoice_item_2.merchant_id).to eq(@merchant.id)
+      end
+    end
     describe '#discount' do
       it "returns the discount value applied to line item" do
         merchant = create(:merchant)
@@ -54,6 +59,8 @@ RSpec.describe InvoiceItem do
 
         expect(invoice_item_4.discount).to eq([])
         expect(invoice_item_1.discount).to eq(discount_1)
+        expect(invoice_item_1.discount_name).to eq(discount_1.name)
+        expect(invoice_item_1.discount_id).to eq(discount_1.id)
         expect(invoice_item_2.discount).to eq(discount_2)
         expect(invoice_item_3.discount).to eq(discount_3)
       end
