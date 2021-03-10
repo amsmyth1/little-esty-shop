@@ -53,7 +53,7 @@ RSpec.describe Invoice do
         expect(Invoice.all_invoices_with_unshipped_items).to eq([@invoice_1, @invoice_21])
       end
     end
-    describe '::total_revenue_with_discounts_applicable(invoice_id)' do
+    describe '#total_revenue, ::total_revenue_with_discounts_applicable/no_discounts_applicable' do
       it "calculates the total when no items are eligible for discount (examples 1)" do
         merchant = create(:merchant)
         merchant = create(:merchant)

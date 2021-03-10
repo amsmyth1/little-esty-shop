@@ -17,11 +17,6 @@ RSpec.describe "Service Objects" do
             expect("Independence Day").to appear_before("Labour Day", only_text: true)
             expect(page).to_not have_content("Christmas")
           end
-        else
-          within '.merchant_discounts#holidays' do
-            expect(page).to have_content("Upcoming Holidays")
-            expect(page).to have_content("Error loading external API")
-          end
         end
       end
     end
