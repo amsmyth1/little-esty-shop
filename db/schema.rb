@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 2021_03_06_205721) do
     t.datetime "updated_at", null: false
     t.integer "discount_id"
     t.decimal "discount", default: "1.0"
-    t.decimal "revenue", default: "0.0"
+    t.decimal "revenue"
     t.index ["invoice_id"], name: "index_invoice_items_on_invoice_id"
     t.index ["item_id"], name: "index_invoice_items_on_item_id"
   end

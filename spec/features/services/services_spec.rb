@@ -9,8 +9,6 @@ RSpec.describe "Service Clients" do
         expect(@holiday_info.count).to eq(10)
         expect(@holiday_info.first[:name]).to eq("Memorial Day")
         expect(@holiday_info.first[:date]).to eq("2021-05-31")
-      else
-        expect(@holiday_info).to eq([])
       end
     end
   end
@@ -36,8 +34,6 @@ RSpec.describe "Service Clients" do
       holidays = ApiService.get_info("https://date.nager.at/Api/v2/NextPublicHolidays/US")
       if holidays.count > 0
         expect(HolidayService.next_three_holidays).to eq(["Memorial Day on 2021-05-31", "Independence Day on 2021-07-05", "Labour Day on 2021-09-06"])
-      else
-        expect(HolidayService.next_three_holidays).to eq(["Error loading external API"])
       end
     end
   end
