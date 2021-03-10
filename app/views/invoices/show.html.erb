@@ -14,7 +14,7 @@
       Sold For: $<%= '%.2f' % invoice_item.unit_price %> |
       Status: <%= invoice_item.status_view_format %>
       <% if invoice_item.discount != [] %>
-        | Discounts:  <%= link_to invoice_item.discount.name, merchant_discount_path((invoice_item.discount.merchant_id), (invoice_item.discount.id))  %>
+        | Discounts:  <%= link_to invoice_item.discount_name, merchant_discount_path((invoice_item.merchant_id), (invoice_item.discount_id))  %>
       <% end %></p>
       <%= form_with url: merchant_invoice_item_path(@merchant, invoice_item), method: :patch, params: { status: :status }, local: true do |f|%>
         <%= f.select :status, [:pending, :packaged, :shipped], selected: invoice_item.status %>
