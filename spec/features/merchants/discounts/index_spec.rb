@@ -12,7 +12,7 @@ RSpec.describe 'As a merchant' do
         within ".discount_info#discount-#{discount.id}" do
           expect(page).to have_content(discount.name)
           expect(page).to have_content(discount.threshold)
-          expect(page).to have_content(discount.percentage)
+          expect(page).to have_content((discount.percentage * 100))
         end
       end
     end
@@ -38,6 +38,12 @@ RSpec.describe 'As a merchant' do
       click_on("Create a New Discount")
 
       expect(current_path).to eq(new_merchant_discount_path(@merchant))
+    end
+    it "should have a link back to the merchant dashboard" do
+      visit merchant_discounts_path(@merchant)
+      click_on("Dashboard")
+
+      expect(current_path).to eq(merchant_dashboard_index_path(@merchant))
     end
   end
 
