@@ -21,10 +21,6 @@ class Invoice < ApplicationRecord
     customer.full_name
   end
 
-  # def merchant_with_no_discount
-  #   invoice_items.joins(:merchants).select("merchants.id").group("merchants.id").pluck("merchants.id")
-  # end
-
   def total_revenue
     (Invoice.total_revenue_with_discounts_applicable(self.id).to_f) +
     (Invoice.total_revenue_with_no_discounts_applicable(self.id).to_f +
