@@ -137,11 +137,11 @@ RSpec.describe 'As a merchant' do
     it 'does not allow item to be updated if attributes are entered incorrectly' do
       visit edit_merchant_item_path(@merchant, @item)
 
-      fill_in :name, with: "Up"
+      fill_in :description, with: "up"
       click_button "Update"
       expect(page).to have_content("Your Item Has Not Been Updated Due To Invalid Fields.")
 
-      fill_in :name, with: "Updated Item"
+      fill_in :name, with: ""
       fill_in :description, with: "Description"
       click_button "Update"
       expect(page).to have_content("Your Item Has Not Been Updated Due To Invalid Fields.")

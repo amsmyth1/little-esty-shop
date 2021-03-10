@@ -21,6 +21,7 @@ class ItemsController < ApplicationController
     @merchant = Merchant.find(params[:merchant_id])
     @item = Item.find(params[:id])
     @item.update(item_params)
+
     if @item.save
       flash[:success] = "Your Item Has Been Updated"
       if params[:status]
@@ -41,8 +42,7 @@ class ItemsController < ApplicationController
 
   def create
     @merchant = Merchant.find(params[:merchant_id])
-    new_item_id = Item.max_id
-    @item = @merchant.items.new(id: new_item_id,
+    @item = @merchant.items.new(
                                 name: item_params[:name],
                                 description: item_params[:description],
                                 unit_price: item_params[:unit_price]

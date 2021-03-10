@@ -24,6 +24,10 @@ class InvoiceItem < ApplicationRecord
     item.merchant
   end
 
+  def merchant_id
+    item.merchant.id
+  end
+
   def invoice_date
     invoice.created_at_view_format
   end
@@ -39,6 +43,17 @@ class InvoiceItem < ApplicationRecord
       []
     else
       Discount.find(discount_id)
+    end
+  end
+
+  def discount_name
+    if discount != []
+      discount.name
+    end
+  end
+  def discount_id
+    if discount != []
+      discount.id
     end
   end
 end

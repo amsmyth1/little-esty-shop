@@ -28,12 +28,6 @@ RSpec.describe Item do
       end
     end
 
-    describe "::max_id" do
-      it 'returns max id plus 1' do
-        expect(Item.max_id).to eq(Item.maximum(:id) + 1)
-      end
-    end
-
     describe '::top_five' do
       it 'returns the top five items for a merchant in terms of total_revenue' do
         expect(Item.top_five).to eq([@item, @item7])

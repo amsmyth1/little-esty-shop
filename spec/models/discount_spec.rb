@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Discount, type: :model do
   describe 'relationhips' do
     it { should belong_to :merchant }
-    # it { should have_many(:invoice_items).through(:merchant)}
+    it { should have_many(:invoice_items).through(:merchant)}
   end
 
   describe 'validations' do
@@ -42,23 +42,6 @@ RSpec.describe Discount, type: :model do
       @discount = @merchant.discounts.new({name: "Name", threshold: 10, percentage: 0})
 
       expect(@discount.save).to eq (false)
-    end
-  end
-
-
-  describe 'class methods' do
-    describe "::max_id" do
-      it 'returns max id plus 1' do
-        merchant = create(:merchant)
-        discount = create(:discount, merchant_id: merchant.id)
-        expect(Discount.max_id).to eq(Discount.maximum(:id) + 1)
-      end
-      it 'returns max id plus 1' do
-        merchant = create(:merchant)
-        discount = create(:discount, merchant_id: merchant.id)
-        Discount.destroy_all
-        expect(Discount.max_id).to eq(1)
-      end
     end
   end
 end
